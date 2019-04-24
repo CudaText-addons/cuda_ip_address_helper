@@ -58,9 +58,9 @@ class Command:
             print('exit')
             res=ip_country(lin)
             if res:
-              msg_status(ip_country(lin))
+              msg_status(res)
             else:
-              msg_status('IP:?')
+              msg_status('IP: ?')
             return
         #ipv4
         print('trying to find ipv4')
