@@ -8,13 +8,14 @@ from urllib import request
 # 132.14.55.68 USA
 # 132.14.55.68.32 Error
 # wer::32d:43:21:ff::sa  
-# ::1
+# 2001:4860:4860:0000:0000:0000:0000:8888
 def ip_country(ip):
-    if not len(ip.split('.'))==4:
+    if not len(ip.split('.'))==4 and not ':' in ip:
         return ''
-    for i in ip.split('.'):
-        if len(i)>3:
-            return ''
+    if not ':' in ip:
+        for i in ip.split('.'):
+            if len(i)>3:
+                return ''
     try:
         req = urllib.request.Request('http://smart-ip.net/geoip/'+ip+'/auto', headers={'User-Agent' : "Magic Browser"})
         con=urllib.request.urlopen(req)
@@ -55,7 +56,6 @@ class Command:
         lin=overline[start+1:end]
         print(lin)
         if 2<=len(lin.split(':'))<=8:
-            print('exit')
             res=ip_country(lin)
             if res:
               msg_status(res)
@@ -63,7 +63,6 @@ class Command:
               msg_status('IP: ?')
             return
         #ipv4
-        print('trying to find ipv4')
         ipsymbols='1234567890.'
         start=x
         end=x
