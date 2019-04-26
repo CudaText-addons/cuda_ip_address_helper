@@ -8,7 +8,10 @@ from urllib import request
 # 132.14.55.68 USA
 # 132.14.55.68.32 Error
 # wer::32d:43:21:ff::sa  
+# z8::0000:0000:0370
 # 2001:4860:4860:0000:0000:0000:0000:8888
+# 2001:0DB8:85A3:0000:0000:8A2E:0370:7334
+
 def ip_country(ip):
     if not len(ip.split('.'))==4 and not ':' in ip:
         return ''
@@ -40,7 +43,7 @@ class Command:
             return
         symbols=', /;()[]{}'
         #ipv6
-        ipsymbols='1234567890abcdef:'
+        ipsymbols='1234567890abcdefABCDEFGHIJKLMNOPQRSTUVWXYZ:'
         start=x
         end=x
         while start>=0:
@@ -54,6 +57,10 @@ class Command:
             else:
                 break
         lin=overline[start+1:end]
+        if 2<=len(lin.split(':'))<=8:
+            if start>=0:
+                if not overline[start] in symbols:
+                    return
         print(lin)
         if 2<=len(lin.split(':'))<=8:
             res=ip_country(lin)
