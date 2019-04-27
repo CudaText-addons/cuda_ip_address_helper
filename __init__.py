@@ -46,10 +46,9 @@ def ip4_country(overline,x):
             return
     start+=1
     ip=overline[start:end]
-    if not ':' in ip:
-        for i in ip.split('.'):
-            if len(i)>3:
-                return ''
+    for i in ip.split('.'):
+           if len(i)>3:
+               return ''
     res=str(ip_country(overline[start:end]))
     if res:
         msg_status(res)
