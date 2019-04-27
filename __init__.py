@@ -11,6 +11,7 @@ from urllib import request
 # z8::0000:0000:0370
 # 2001:4860:4860:0000:0000:0000:0000:8888
 # 2001:0DB8:85A3:0000:0000:8A2E:0370:7334
+# B8::0000:0000:0370z
 
 def ip_country(ip):
     if not len(ip.split('.'))==4 and not ':' in ip:
@@ -25,6 +26,63 @@ def ip_country(ip):
         return 'IP: '+str(con.read()).split('Geo-Location for')[1].split('Country')[1].split('</td>')[1].split('>')[2].strip()
     except:
         return 'IP: ?'
+
+def ip4_country(overline,x):
+    ipsymbols='1234567890.'
+    symbols=', /;()[]{}'
+    start=x
+    end=x
+    while start>=0:
+        if overline[start] in ipsymbols:
+            start -= 1
+        else:
+            break
+    while end<len(overline):
+        if overline[end] in ipsymbols:
+            end += 1
+        else:
+            break
+    if start>-1:
+        if not overline[start] in symbols:
+            return
+    if len(overline)>end:
+        if not overline[end] in symbols:
+            return
+    start+=1
+    res=str(ip_country(overline[start:end]))
+    if res:
+        msg_status(res)
+
+def ip6_country(overline,x):
+    ipsymbols='1234567890abcdefABCDEF:'
+    symbols=', /;()[]{}'
+    start=x
+    end=x
+    while start>=0:
+        if overline[start] in ipsymbols:
+            start -= 1
+        else:
+            break
+    while end<len(overline):
+        if overline[end] in ipsymbols:
+            end += 1
+        else:
+            break
+    lin=overline[start+1:end]
+    if 2<=len(lin.split(':'))<=8:
+        if start>=0:
+            if not overline[start] in symbols:
+                return
+        if end<len(overline):
+            if not overline[end] in symbols:
+                return
+    if 2<=len(lin.split(':'))<=8:
+        res=ip_country(lin)
+        if res:
+          msg_status(res)
+        else:
+          msg_status('IP: ?')
+        return
 
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_ip_address_helper.ini')
 
@@ -41,55 +99,7 @@ class Command:
         overline=ed_self.get_text_line(y)
         if not (0<=x<len(overline)):
             return
-        symbols=', /;()[]{}'
         #ipv6
-        ipsymbols='1234567890abcdefABCDEFGHIJKLMNOPQRSTUVWXYZ:'
-        start=x
-        end=x
-        while start>=0:
-            if overline[start] in ipsymbols:
-                start -= 1
-            else:
-                break
-        while end<len(overline):
-            if overline[end] in ipsymbols:
-                end += 1
-            else:
-                break
-        lin=overline[start+1:end]
-        if 2<=len(lin.split(':'))<=8:
-            if start>=0:
-                if not overline[start] in symbols:
-                    return
-        print(lin)
-        if 2<=len(lin.split(':'))<=8:
-            res=ip_country(lin)
-            if res:
-              msg_status(res)
-            else:
-              msg_status('IP: ?')
-            return
-        #ipv4
-        ipsymbols='1234567890.'
-        start=x
-        end=x
-        while start>=0:
-            if overline[start] in ipsymbols:
-                start -= 1
-            else:
-                break
-        while end<len(overline):
-            if overline[end] in ipsymbols:
-                end += 1
-            else:
-                break
-        if start>-1:
-            if not overline[start] in symbols:
-                return
-        if len(overline)>end:
-            if not overline[end] in symbols:
-                return
-        start+=1
-        res=str(ip_country(overline[start:end]))
-        if res:
-            msg_status(res)
+        if not ip6_country(overline,x):
+            #ipv4
+            ip4_country(overline,x)
