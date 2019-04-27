@@ -84,14 +84,8 @@ def ip6_country(overline,x):
           msg_status('IP: ?')
         return
 
-fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_ip_address_helper.ini')
-
-
 class Command:
 
-    def config(self):
-        file_open(fn_config)
-        
     def on_mouse_stop(self, ed_self, x, y):
         x,y = ed.convert(CONVERT_PIXELS_TO_CARET,x,y)
         if not (0<=y<ed_self.get_line_count()):
