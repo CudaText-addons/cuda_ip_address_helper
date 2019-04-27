@@ -14,12 +14,6 @@ from urllib import request
 # B8::0000:0000:0370z
 
 def ip_country(ip):
-    if not len(ip.split('.'))==4 and not ':' in ip:
-        return ''
-    if not ':' in ip:
-        for i in ip.split('.'):
-            if len(i)>3:
-                return ''
     try:
         req = urllib.request.Request('http://smart-ip.net/geoip/'+ip+'/auto', headers={'User-Agent' : "Magic Browser"})
         con=urllib.request.urlopen(req)
@@ -32,6 +26,8 @@ def ip4_country(overline,x):
     symbols=', /;()[]{}'
     start=x
     end=x
+    
+    
     while start>=0:
         if overline[start] in ipsymbols:
             start -= 1
@@ -49,6 +45,11 @@ def ip4_country(overline,x):
         if not overline[end] in symbols:
             return
     start+=1
+    ip=overline[start:end]
+    if not ':' in ip:
+        for i in ip.split('.'):
+            if len(i)>3:
+                return ''
     res=str(ip_country(overline[start:end]))
     if res:
         msg_status(res)
