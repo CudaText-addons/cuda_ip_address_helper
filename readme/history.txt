@@ -1,2 +1,5 @@
+2019.04.27
++ supported IPv6 addresses
+
 2019.04.21
 initial version
