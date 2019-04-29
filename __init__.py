@@ -79,9 +79,9 @@ def ip6_country(overline,x):
     if 2<=len(lin.split(':'))<=8:
         res=ip_country(lin)
         if res:
-          msg_status(res)
+            msg_status(res)
         else:
-          msg_status('IP: ?')
+            msg_status('IP: ?')
         return
 
 class Command:
