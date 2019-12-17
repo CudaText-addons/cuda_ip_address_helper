@@ -23,7 +23,7 @@ def ip_country(ip):
 
 def ip4_country(overline,x):
     ipsymbols='1234567890.'
-    symbols=', /;()[]{}'
+    symbols=', /;()[]{}\t'
     start=x
     end=x
     
@@ -55,7 +55,7 @@ def ip4_country(overline,x):
 
 def ip6_country(overline,x):
     ipsymbols='1234567890abcdefABCDEF:'
-    symbols=', /;()[]{}'
+    symbols=', /;()[]{}\t'
     start=x
     end=x
     while start>=0:

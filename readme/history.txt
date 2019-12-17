@@ -1,3 +1,7 @@
+
+2019.12.17
++ support tab-chars around IP
+
 2019.04.27
 + supported IPv6 addresses
 
