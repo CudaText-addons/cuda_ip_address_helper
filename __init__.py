@@ -13,6 +13,8 @@ from urllib import request
 # 2001:0DB8:85A3:0000:0000:8A2E:0370:7334
 # B8::0000:0000:0370z
 
+ABOUT = '[IP Address Helper] '
+
 def ip_country(ip):
     try:
         req = urllib.request.Request('http://smart-ip.net/geoip/'+ip+'/auto', headers={'User-Agent' : "Magic Browser"})
@@ -85,15 +87,28 @@ def ip6_country(overline,x):
         return
 
 class Command:
+    active = False
 
     def on_mouse_stop(self, ed_self, x, y):
-        x,y = ed.convert(CONVERT_PIXELS_TO_CARET,x,y)
+        if not self.active:
+            return
+        res = ed.convert(CONVERT_PIXELS_TO_CARET,x,y)
+        if res is None:
+            return
+        x,y = res
         if not (0<=y<ed_self.get_line_count()):
             return
         overline=ed_self.get_text_line(y)
         if not (0<=x<len(overline)):
             return
         #ipv6
+        msg_status(ABOUT+'Looking for IPv6...', True)
         if not ip6_country(overline,x):
             #ipv4
+            msg_status(ABOUT+'Looking for IPv4...', True)
             ip4_country(overline,x)
+        msg_status('')
+
+    def toggle(self):
+        self.active = not self.active
+        msg_status(ABOUT+'Turned '+('on' if self.active else 'off'))
