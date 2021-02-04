@@ -14,76 +14,81 @@ from cudatext import *
 
 ABOUT = '[IP Address Helper] '
 
-def ip_country(ip):
+def work(ip):
     # https://stackoverflow.com/questions/24678308/how-to-find-location-with-ip-address-in-python
+    msg_status(ABOUT + 'Looking for IPv4...', True)
     url = 'https://ipinfo.io/' + ip + '/json'
     res = urlopen(url)
+    msg_status('')
     if not res: return
     data = json.load(res)
     code = data.get('country', '?')
     return 'IP '+ip+': '+code
 
-def ip4_country(overline,x):
+def detect_ip4(s,x):
     ipsymbols='1234567890.'
     symbols=', /;()[]{}\t'
     start=x
     end=x
 
     while start>=0:
-        if overline[start] in ipsymbols:
+        if s[start] in ipsymbols:
             start -= 1
         else:
             break
-    while end<len(overline):
-        if overline[end] in ipsymbols:
+    while end<len(s):
+        if s[end] in ipsymbols:
             end += 1
         else:
             break
     if start>-1:
-        if not overline[start] in symbols:
+        if not s[start] in symbols:
             return
-    if len(overline)>end:
-        if not overline[end] in symbols:
+    if len(s)>end:
+        if not s[end] in symbols:
             return
     start+=1
-    ip=overline[start:end]
-    for i in ip.split('.'):
-           if len(i)>3:
-               return ''
-    res=str(ip_country(overline[start:end]))
+    ip=s[start:end]
+    parts=ip.split('.')
+    if len(parts)!=4:
+        return
+    for i in parts:
+        if len(i)>3:
+            return
+    res=work(ip)
     if res:
         msg_status(res)
 
-def ip6_country(overline,x):
+'''
+def detect_ip6(s,x):
     ipsymbols='1234567890abcdefABCDEF:'
     symbols=', /;()[]{}\t'
     start=x
     end=x
     while start>=0:
-        if overline[start] in ipsymbols:
+        if s[start] in ipsymbols:
             start -= 1
         else:
             break
-    while end<len(overline):
-        if overline[end] in ipsymbols:
+    while end<len(s):
+        if s[end] in ipsymbols:
             end += 1
         else:
             break
-    lin=overline[start+1:end]
-    if 2<=len(lin.split(':'))<=8:
+    lin=s[start+1:end]
+    parts=lin.split(':')
+    if 2<=len(parts)<=8:
         if start>=0:
-            if not overline[start] in symbols:
+            if not s[start] in symbols:
                 return
-        if end<len(overline):
-            if not overline[end] in symbols:
+        if end<len(s):
+            if not s[end] in symbols:
                 return
-    if 2<=len(lin.split(':'))<=8:
-        res=ip_country(lin)
+    if 2<=len(parts)<=8:
+        res=work(lin)
         if res:
             msg_status(res)
-        else:
-            msg_status('IP: ?')
-        return
+'''
 
 class Command:
     active = False
@@ -97,15 +102,10 @@ class Command:
         x,y = res
         if not (0<=y<ed_self.get_line_count()):
             return
-        overline=ed_self.get_text_line(y)
-        if not (0<=x<len(overline)):
+        s=ed_self.get_text_line(y)
+        if not (0<=x<len(s)):
             return
-        #ipv6
-        msg_status(ABOUT+'Looking for IPv6...', True)
-        if not ip6_country(overline,x):
-            #ipv4
-            msg_status(ABOUT+'Looking for IPv4...', True)
-            ip4_country(overline,x)
+        detect_ip4(s,x)
 
     def toggle(self):
         self.active = not self.active

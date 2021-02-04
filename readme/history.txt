@@ -3,6 +3,7 @@
 + add: use new provider of IP addresses
 + add: menu item 'Plugins / IP Address Helper / Toggle on/off", by default plugin is inactive
 + add: statusbar messages 'looking for IPv4', 'looking for IPv6'
+* removed support for IPv6
 
 2019.12.17
 + support tab-chars around IP
