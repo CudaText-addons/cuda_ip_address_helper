@@ -1,5 +1,6 @@
 
 2021.02.05
++ add: use new provider of IP addresses
 + add: menu item 'Plugins / IP Address Helper / Toggle on/off", by default plugin is inactive
 + add: statusbar messages 'looking for IPv4', 'looking for IPv6'
 
