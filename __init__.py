@@ -1,13 +1,12 @@
 import os
+import json
+from urllib.request import urlopen
 from cudatext import *
-
-import urllib
-from urllib import request
 
 # 176.59.8.61 Russia
 # 132.14.55.68 USA
 # 132.14.55.68.32 Error
-# wer::32d:43:21:ff::sa  
+# wer::32d:43:21:ff::sa
 # z8::0000:0000:0370
 # 2001:4860:4860:0000:0000:0000:0000:8888
 # 2001:0DB8:85A3:0000:0000:8A2E:0370:7334
@@ -16,20 +15,20 @@ from urllib import request
 ABOUT = '[IP Address Helper] '
 
 def ip_country(ip):
-    try:
-        req = urllib.request.Request('http://smart-ip.net/geoip/'+ip+'/auto', headers={'User-Agent' : "Magic Browser"})
-        con=urllib.request.urlopen(req)
-        return 'IP: '+str(con.read()).split('Geo-Location for')[1].split('Country')[1].split('</td>')[1].split('>')[2].strip()
-    except:
-        return 'IP: ?'
+    # https://stackoverflow.com/questions/24678308/how-to-find-location-with-ip-address-in-python
+    url = 'https://ipinfo.io/' + ip + '/json'
+    res = urlopen(url)
+    if not res: return
+    data = json.load(res)
+    code = data.get('country', '?')
+    return 'IP '+ip+': '+code
 
 def ip4_country(overline,x):
     ipsymbols='1234567890.'
     symbols=', /;()[]{}\t'
     start=x
     end=x
-    
-    
+
     while start>=0:
         if overline[start] in ipsymbols:
             start -= 1
@@ -107,8 +106,7 @@ class Command:
             #ipv4
             msg_status(ABOUT+'Looking for IPv4...', True)
             ip4_country(overline,x)
-        msg_status('')
 
     def toggle(self):
         self.active = not self.active
-        msg_status(ABOUT+'Turned '+('on' if self.active else 'off'))
+        msg_status(ABOUT+('Active' if self.active else 'Inactive'))
