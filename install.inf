@@ -5,10 +5,6 @@ type=cudatext-plugin
 subdir=cuda_ip_address_helper
 homepage=https://github.com/CudaText-addons/cuda_ip_address_helper
 
-[item1]
-section=events
-events=on_mouse_stop
-
 [item5]
 section=commands
 caption=IP Address Helper\Toggle on/off
