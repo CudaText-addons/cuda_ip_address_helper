@@ -3,7 +3,7 @@ title=IP Address Helper
 desc=When mouse hovers IP address in text, plugin shows country of that address in the statusbar
 type=cudatext-plugin
 subdir=cuda_ip_address_helper
-homepage=https://github.com/Alexey-T/cuda_ip_address_helper
+homepage=https://github.com/CudaText-addons/cuda_ip_address_helper
 
 [item1]
 section=events
