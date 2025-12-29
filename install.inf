@@ -4,8 +4,9 @@ desc=When mouse hovers IP address in text, plugin shows country of that address 
 type=cudatext-plugin
 subdir=cuda_ip_address_helper
 homepage=https://github.com/CudaText-addons/cuda_ip_address_helper
+api=1.0.471
 
-[item5]
+[item1]
 section=commands
 caption=IP Address Helper\Toggle on/off
 method=toggle

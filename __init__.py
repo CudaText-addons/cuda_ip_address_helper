@@ -109,6 +109,6 @@ class Command:
 
     def toggle(self):
         self.active = not self.active
-        ev = 'on_mouse_stop' if self.active else ''
-        app_proc(PROC_SET_EVENTS, 'cuda_ip_address_helper;'+ev+';')
+        act = PROC_EVENTS_SUB if self.active else PROC_EVENTS_UNSUB
+        app_proc(act, 'cuda_ip_address_helper;on_mouse_stop;;')
         msg_status(ABOUT+('Active' if self.active else 'Inactive'))
